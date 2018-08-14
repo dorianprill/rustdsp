@@ -1,5 +1,6 @@
 extern crate rustfft as fft;
 extern crate ndarray;
+extern crate ndarray-linalg;
 extern crate num_traits;
 
 // submodules
