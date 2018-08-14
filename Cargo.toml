@@ -1,0 +1,10 @@
+[package]
+name    = "sigpro"
+version = "0.1.0"
+authors = ["dap"]
+
+[dependencies]
+ndarray         = "^0.11.0"
+ndarray-linalg  = { version = "^0.9", features = ["openblas"] }
+rustfft         = "^2.1.0"
+num-traits      = "^0.2"
