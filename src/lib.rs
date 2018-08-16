@@ -1,10 +1,11 @@
 extern crate rustfft as fft;
 extern crate ndarray;
-extern crate ndarray-linalg;
+extern crate ndarray_linalg;
 extern crate num_traits;
 
 // submodules
 mod convolution;
+mod padding;
 
 #[cfg(test)]
 mod tests {
