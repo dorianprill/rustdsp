@@ -20,6 +20,28 @@ pub fn conv(input_a: &Vec<f64>, input_b: &Vec<f64>) -> Vec<f64> {
 }
 
 
+/// calculate the convolution y = x * h
+/// in line with its mathematical definition (reversed impulse response)
+/// results in better caching because each element in y is only written once
+// pub fn conv_accumulate(input_x: &Vec<f64>, input_h: &Vec<f64>) -> Vec<f64> {
+//     let mut out_y: Vec<f64> = vec![0f64; (input_x.len() + input_h.len() - 1) as usize];
+//     let mut accum: f64;
+//     let mut n:     usize;
+//     let ny:        usize    = out_y.len();
+//     for (y_i, y) in out_y.iter_mut().enumerate() {
+//         accum = 0.0;
+//         for (h_i, &h) in input_h.iter().enumerate() {
+//             n = ny - input_x.len()-1 - input_h.len()-1 + h_i;
+//             if n < input_x.len() { // implicit n >= 0 due to type bound
+//                 accum += input_x[n] * input_h[ny - h_i - 1]
+//             }
+//         }
+//         *y = accum;
+//     }
+//     out_y
+// }
+
+
 
 //#[inline(never)]
 pub fn conv2d<F>(a: &ArrayView2<F>, b: &ArrayView2<F>, out: &mut ArrayViewMut2<F>)
@@ -63,14 +85,12 @@ mod tests {
     #[test]
     fn conv1d_impulse_response() {
         let x: Vec<f64>   = vec![3.0, 4.0, 5.0]; // excitation signal
-        let h: Vec<f64>   = vec![2.0, 1.0, 0.0];    // impulse response of dummy system
-        let y: Vec<f64>   = vec![6.0, 11.0, 14.0, 5.0, 0.0]; // system output
+        let h: Vec<f64>   = vec![2.0, 1.0];    // impulse response of dummy system
+        let y: Vec<f64>   = vec![6.0, 11.0, 14.0, 5.0]; // system output
         let res: Vec<f64> = conv(&x,&h);
-        // This loop prints: 0 1 2
-        for r in &res {
-            print!("{} ", r);
-        }
+        //let res_accum: Vec<f64> = conv_accumulate(&x,&h);
         assert_eq!(res, y);
+        //assert_eq!(res_accum, y);
     }
 
 
