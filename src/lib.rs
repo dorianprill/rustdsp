@@ -9,6 +9,7 @@ pub extern crate num_complex;
 mod convolution;
 mod padding;
 mod signal;
+mod filters;
 
 #[cfg(test)]
 mod tests {
