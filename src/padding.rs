@@ -15,7 +15,7 @@ impl Pad for Vec<f64> {
         if len <= self.len() {
             return padded; // silently return original signal for now
         }
-        padded.extend(vec![0f64; (len - self.len())]);
+        padded.extend(vec![0f64; len - self.len()]);
         padded
     }
 
@@ -26,9 +26,9 @@ pub fn pad_equal(a: &mut Vec<f64>, b: &mut Vec<f64>) {
     let la = a.len();
     let lb = b.len();
     if a.len() < b.len() {
-        a.extend(vec![0f64; (lb - la)]);
+        a.extend(vec![0f64; lb - la]);
     } else if b.len() < a.len() {
-        b.extend(vec![0f64; (la - lb)]);
+        b.extend(vec![0f64; la - lb]);
     }
 }
 

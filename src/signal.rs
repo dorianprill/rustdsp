@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub};
+//use std::ops::{Add, Sub};
 use std::vec::Vec;
 use std::slice::IterMut;
 use std::vec::IntoIter;
@@ -60,29 +60,29 @@ impl<T> Signal<T> {
 // obvious_impl! { impl IntoIterator for Signal { fn into_iter } }
 
 
-/// Since we use plain Vec<T> as implementation, we would expect the add operation to be pointwise.
-impl Add<Signal<f64>> for Signal<f64> {
-    type Output = Signal<f64>;
-    fn add(self, other: Signal<f64>) -> Signal<f64> {
-        let mut res: Signal<f64> = Signal(vec![0f64; self.len() as usize]);
-        for ((zref, a), b) in res.iter_mut().zip(&self).zip(&other) {
-            *zref = a + b;
-        }
-        res
-    }
-}
+// Since we use plain Vec<T> as implementation, we would expect the add operation to be pointwise.
+// impl Add<Signal<f64>> for Signal<f64> {
+//     type Output = Signal<f64>;
+//     fn add(self, other: Signal<f64>) -> Signal<f64> {
+//         let mut res: Signal<f64> = Signal(vec![0f64; self.len() as usize]);
+//         for ((zref, a), b) in res.iter_mut().zip(&self).zip(&other) {
+//             *zref = a + b;
+//         }
+//         res
+//     }
+// }
 
 
-#[cfg(test)]
-mod tests {
-    use signal::Signal;
-
-    fn add_real() {
-        let a: Signal<f64> = Signal(vec![1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]);
-        let b: Signal<f64> = Signal(vec![1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]);
-        let y: Signal<f64> = Signal(vec![2.0, 0.0, 1.0, 0.0, 2.0, 0.0, 1.0, 0.0, 2.0]);
-        let mut c: Signal<f64> = a + b;
-        assert_eq!(c, y);
-    }
-
-}
+// #[cfg(test)]
+// mod tests {
+//     use signal::Signal;
+//
+//     fn add_real() {
+//         let a: Signal<f64> = Signal(vec![1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]);
+//         let b: Signal<f64> = Signal(vec![1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]);
+//         let y: Signal<f64> = Signal(vec![2.0, 0.0, 1.0, 0.0, 2.0, 0.0, 1.0, 0.0, 2.0]);
+//         let mut c: Signal<f64> = a + b;
+//         assert_eq!(c, y);
+//     }
+//
+// }
