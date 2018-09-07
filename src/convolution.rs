@@ -39,8 +39,8 @@ pub fn xcorr(a: &Vec<f64>, b: &Vec<f64>, mode: ConvMode) -> Vec<f64> {
 pub fn autocorr(a: &Vec<f64>, b: &Vec<f64>) -> Vec<f64> {
     let brev = b.clone().into_iter().rev().collect();
     let res = conv(a, &brev, ConvMode::Full);
-    let mid: usize = ((res.len() as f64)/2.).floor() as usize + 1;
-    return res[0..mid].to_vec()
+    let mid: usize = ((res.len() as f64)/2.).floor() as usize;
+    return res[mid..].to_vec()
 }
 
 
@@ -127,7 +127,7 @@ mod tests {
         let resyy: Vec<f64> = xcorr(&y, &y, ConvMode::Full);
         assert_eq!(res, y);
         assert_eq!(resyy, yy);
-        assert_eq!(resyy[0..4].to_vec(), autocorr(&y, &y))
+        assert_eq!(resyy[3..].to_vec(), autocorr(&y, &y))
     }
 
 
