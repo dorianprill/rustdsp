@@ -4,14 +4,10 @@
 use ndarray::prelude::*;
 use std::f64::consts::PI;
 
-const SOBEL_X: [[f32; 3]; 3] = [[-1., 0., 1.], [-2., 0., 2.], [-1., 0., 1.]];
-const SOBEL_Y: [[f32; 3]; 3] = [[ 1., 2., 1.], [ 0., 0., 0.], [-1., -2., -1.]];
-const SHARPEN: [[f32; 3]; 3] = [[0., -1., 0.], [ -1., 5., -1.], [0., -1., 0.]];
-
 /// Normalized box Blur filter
 /// every element (1.0) is normalized by the sum of total elements (dim^2*1.0)
 /// argument dim is used for both dimensions due to the filters quadratic shape
-pub fn blur_box(dim: usize) -> Array2<f64> {
+pub fn blur2d(dim: usize) -> Array2<f64> {
     let filt: Array2<f64> = Array2::ones((dim, dim)) * (1.0/(dim as f64*dim as f64));
     filt
 }
@@ -19,7 +15,7 @@ pub fn blur_box(dim: usize) -> Array2<f64> {
 
 /// 2D Gaussian Filter for image blurring/smoothing
 /// currently uses square support pattern
-pub fn blur_gauss(dim: usize, std: f64) -> Array2<f64> {
+pub fn gaussian2d(dim: usize, std: f64) -> Array2<f64> {
 
     let mut filt: Array2<f64> = Array2::zeros((dim, dim));
     let mut sum: f64 = 0.;
@@ -55,7 +51,7 @@ pub fn blur_gauss(dim: usize, std: f64) -> Array2<f64> {
 
 
 /// Basic sharpening filter to sharpen edge content of an image
-pub fn sharpen() -> Array2<f64> {
+pub fn sharpen2d() -> Array2<f64> {
     let filt: Array2<f64> = array![ [ 0., -1.,  0.],
                                     [-1.,  5., -1.],
                                     [ 0., -1.,  0.] ];

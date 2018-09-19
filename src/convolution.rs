@@ -14,6 +14,13 @@ pub enum ConvMode {
     Valid       // output length max(M, N) - min(M, N) + 1
 }
 
+#[derive(PartialEq)]
+pub enum Boundary {
+    Fill,       // fill the border regions of size floor(kernel_size/2) with a specified value
+    Extend,     // replicate the border pixels floor(kernel_size/2) times
+    Mirror      // Mirror the border region of size floor(kernel_size/2)
+}
+
 /// calculate the concolution y = convolve(x,h)
 /// y(i) = sum_k{ x[i-k] * h[k]}
 /// offer three modes 'full', 'same', and 'valid'
@@ -67,6 +74,7 @@ fn conv_full(input_x: &Vec<f64>, input_h: &Vec<f64>) -> Vec<f64> {
 /// alternative implementation to conv_full
 /// has worse caching behaviour because each element in y is written multiple times
 /// maybe better for parallelization (?)
+#[allow(dead_code)]
 fn conv_full_scatter(input_a: &Vec<f64>, input_b: &Vec<f64>) -> Vec<f64> {
     let mut out: Vec<f64> = vec![0f64; (input_a.len() + input_b.len() - 1) as usize];
     for (a_i, &a) in input_a.iter().enumerate() {
@@ -80,7 +88,7 @@ fn conv_full_scatter(input_a: &Vec<f64>, input_b: &Vec<f64>) -> Vec<f64> {
 
 
 //#[inline(never)]
-pub fn conv2d<F>(a: &ArrayView2<F>, b: &ArrayView2<F>, out: &mut ArrayViewMut2<F>)
+pub fn conv2d<F>(a: &ArrayView2<F>, b: &ArrayView2<F>, out: &mut ArrayViewMut2<F>, bound: Boundary)
     where F: Float,
 {
     let (na, ma) = a.dim();
@@ -93,6 +101,15 @@ pub fn conv2d<F>(a: &ArrayView2<F>, b: &ArrayView2<F>, out: &mut ArrayViewMut2<F
         return;
     }
     assert!(np >= na && mp >= ma && np >= nb && mp >= mb);
+    // construct small boundary region array and compute
+    if bound == Boundary::Fill {
+
+    } else if bound == Boundary::Extend {
+
+    } else { // Mirror
+
+    }
+
         for i in 0..na - noff {
             for j in 0..ma - moff {
                 let mut conv = F::zero();
@@ -110,11 +127,7 @@ pub fn conv2d<F>(a: &ArrayView2<F>, b: &ArrayView2<F>, out: &mut ArrayViewMut2<F
 #[cfg(test)]
 mod tests {
     use ndarray::prelude::*;
-    use convolution::conv;
-    use convolution::xcorr;
-    use convolution::autocorr;
-    use convolution::ConvMode;
-    use convolution::conv2d;
+    use convolution::*;
 
     #[test]
     /// calculate a known impulse response in all different convolution modes and check the output
@@ -148,7 +161,7 @@ mod tests {
         }
         println!("{:2}", a);
         let mut res = Array::zeros(a.dim());
-        conv2d(&a.view(), &b.view(), &mut res.view_mut());
+        conv2d(&a.view(), &b.view(), &mut res.view_mut(), Boundary::Fill);
         println!("{:2}", res);
         //assert_eq!(a.max(), res.max())
     }

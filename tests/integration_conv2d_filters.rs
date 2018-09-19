@@ -5,14 +5,14 @@ extern crate rustdsp;
 #[macro_use]
 extern crate ndarray;
 use ndarray::prelude::*;
-use rustdsp::convolution;
+use rustdsp::convolution::*;
 use rustdsp::filters;
 
 #[test]
 fn conv2d_sharpen() {
     let n = 16;
     let mut a = Array::zeros((n, n));
-    let b = filters::sharpen();
+    let b = filters::sharpen2d();
     // make a circle
     let c = (8., 8.);
     for ((i, j), elt) in a.indexed_iter_mut() {
@@ -26,7 +26,7 @@ fn conv2d_sharpen() {
     println!("{:2}", a);
     let mut res = Array::zeros(a.dim());
     for _ in 0..5 {
-        convolution::conv2d(&a.view(), &b.view(), &mut res.view_mut());
+        conv2d(&a.view(), &b.view(), &mut res.view_mut(), Boundary::Fill);
     }
     println!("{:2}", res);
     //assert_eq!(a.max(), res.max())
@@ -51,8 +51,8 @@ fn conv2d_sobel() {
     let mut res_x = Array::zeros(a.dim());
     let mut res_y = Array::zeros(a.dim());
     // apply filter in both directions in parallel
-    convolution::conv2d(&a.view(), &b_x.view(), &mut res_x.view_mut());
-    convolution::conv2d(&a.view(), &b_y.view(), &mut res_y.view_mut());
+    conv2d(&a.view(), &b_x.view(), &mut res_x.view_mut(), Boundary::Fill);
+    conv2d(&a.view(), &b_y.view(), &mut res_y.view_mut(), Boundary::Fill);
     // combine the output
     let res = res_x + res_y;
     println!("{:2}", a);

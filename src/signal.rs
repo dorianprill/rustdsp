@@ -1,59 +1,59 @@
 //use std::ops::{Add, Sub};
-use std::vec::Vec;
-use std::slice::IterMut;
-use std::vec::IntoIter;
+// use std::vec::Vec;
+// use std::slice::IterMut;
+// use std::vec::IntoIter;
+//
+// // Signal type based on newtype wrapper around Vec<T>
+// #[derive(Default, Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
+// struct Signal<T>(Vec<T>);
+//
+// /// Iterator object implementation for new type
+// // You can create a new struct which will contain a reference to your set of data.
+// struct IterSignal<'a, T: 'a> {
+//     inner: &'a Signal<T>,
+//     // And there is a position used to know where you are in your iteration.
+//     pos: usize,
+// }
+//
+// // Now you can just implement the `Iterator` trait on your `IterNewType` struct.
+// impl<'a, T> Iterator for IterSignal<'a, T> {
+//     type Item = &'a T;
+//
+//     fn next(&mut self) -> Option<Self::Item> {
+//         if self.pos >= self.inner.0.len() {
+//             // Obviously, there isn't any more data to read so let's stop here.
+//             None
+//         } else {
+//             // We increment the position of our iterator.
+//             self.pos += 1;
+//             // We return the current value pointed by our iterator.
+//             self.inner.0.get(self.pos - 1)
+//         }
+//     }
+// }
 
-// Signal type based on newtype wrapper around Vec<T>
-#[derive(Default, Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
-struct Signal<T>(Vec<T>);
-
-/// Iterator object implementation for new type
-// You can create a new struct which will contain a reference to your set of data.
-struct IterSignal<'a, T: 'a> {
-    inner: &'a Signal<T>,
-    // And there is a position used to know where you are in your iteration.
-    pos: usize,
-}
-
-// Now you can just implement the `Iterator` trait on your `IterNewType` struct.
-impl<'a, T> Iterator for IterSignal<'a, T> {
-    type Item = &'a T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.pos >= self.inner.0.len() {
-            // Obviously, there isn't any more data to read so let's stop here.
-            None
-        } else {
-            // We increment the position of our iterator.
-            self.pos += 1;
-            // We return the current value pointed by our iterator.
-            self.inner.0.get(self.pos - 1)
-        }
-    }
-}
-
-/// BOILERPLATE
-/// Since we can't(?) access or derive the underlying vector implementation for
-/// len(), iter(), iter_mut(), we have to implement simple wrappers on our own
-impl<T> Signal<T> {
-
-    fn len(self) -> usize {
-        self.len()
-    }
-
-    fn iter_mut(&mut self) -> IterMut<T> {
-        self.iter_mut()
-    }
-
-    fn iter(self) -> IntoIter<T> {
-        self.iter()
-    }
-
-    // fn zip(self, other: U) -> Zip<Self, <U as IntoIterator::IntoIter>
-    // where U: IntoIterator, {
-    //     self.zip(other)
-    // }
-}
+// BOILERPLATE
+// Since we can't(?) access or derive the underlying vector implementation for
+// len(), iter(), iter_mut(), we have to implement simple wrappers on our own
+// impl<T> Signal<T> {
+//
+//     fn len(self) -> usize {
+//         self.len()
+//     }
+//
+//     fn iter_mut(&mut self) -> IterMut<T> {
+//         self.iter_mut()
+//     }
+//
+//     fn iter(self) -> IntoIter<T> {
+//         self.iter()
+//     }
+//
+//     // fn zip(self, other: U) -> Zip<Self, <U as IntoIterator::IntoIter>
+//     // where U: IntoIterator, {
+//     //     self.zip(other)
+//     // }
+// }
 
 
 // obvious_impl! { impl IntoIterator for Signal { fn iter_mut } }
